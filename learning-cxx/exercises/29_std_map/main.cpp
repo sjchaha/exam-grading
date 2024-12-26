@@ -7,10 +7,19 @@
 template<class k, class v>
 bool key_exists(std::map<k, v> const &map, k const &key) {
     // TODO: 实现函数
+    for(const auto& n : map)
+    {
+        if(key == n.first)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 template<class k, class v>
 void set(std::map<k, v> &map, k key, v value) {
+    map[key] = value;
     // TODO: 实现函数
 }
 

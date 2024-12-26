@@ -1,15 +1,19 @@
 ﻿#include "../exercise.h"
-
+#include <cstring>
 // READ: 类模板 <https://zh.cppreference.com/w/cpp/language/class_template>
 
 template<class T>
 struct Tensor4D {
     unsigned int shape[4];
     T *data;
-
+    unsigned int size = 1;
     Tensor4D(unsigned int const shape_[4], T const *data_) {
-        unsigned int size = 1;
+        
         // TODO: 填入正确的 shape 并计算 size
+        for (int i = 0; i < 4; ++i) {
+            shape[i] = shape_[i];
+            size *= shape[i];
+        }
         data = new T[size];
         std::memcpy(data, data_, size * sizeof(T));
     }
@@ -27,9 +31,31 @@ struct Tensor4D {
     // 例如，`this` 形状为 `[1, 2, 3, 4]`，`others` 形状为 `[1, 2, 1, 4]`，
     // 则 `this` 与 `others` 相加时，3 个形状为 `[1, 2, 1, 4]` 的子张量各自与 `others` 对应项相加。
     Tensor4D &operator+=(Tensor4D const &others) {
-        // TODO: 实现单向广播的加法
-        return *this;
-    }
+    // 分别判断四个维度是否需要广播并处理
+    if(shape[1] != others.shape[1])
+        {
+            for(size_t i = 0; i < size; ++i)
+            {
+                data[i] += others.data[0];
+            }
+            return *this;
+        }else if(shape[3] != others.shape[3])
+        {
+            for(size_t i = 0; i < size; ++i)
+            {
+                data[i] += others.data[i / 4];
+            }
+            return *this;
+        }
+        else
+        {
+           for(size_t i = 0; i < size; ++i)
+            {
+                data[i] += others.data[i];
+            } 
+        }
+    return *this;
+}
 };
 
 // ---- 不要修改以下代码 ----

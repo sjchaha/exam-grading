@@ -25,6 +25,15 @@ float sigmoid(float x) {
 TaggedUnion sigmoid_dyn(TaggedUnion x) {
     TaggedUnion ans{x.type};
     // TODO: 根据 type 调用 sigmoid
+    if(x.type == DataType::Float)
+    {
+        ans.f = 1 / (1 + std::exp(-x.f));
+    }
+    else if(x.type == DataType::Double)
+    {
+        ans.d = 1 / (1 + std::exp(-x.d));
+    }
+    
     return ans;
 }
 
